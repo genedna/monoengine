@@ -4,7 +4,20 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-axum = "0.8"
-shuttle-axum = "0.56.0"
-shuttle-runtime = "0.56.0"
-tokio = "1.28.2"
+clap = { version = "4.5.45", features = ["derive"] }
+clap_derive = "4.5.45"
+axum = { version="0.8.4", features=["macros", "json"] }
+axum-extra = "0.10.1"
+tokio = "1.45.1"
+tokio-stream = "0.1.17"
+tokio-util = "0.7.15"
+anyhow = "1.0.98"
+thiserror = "2.0.12"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
+tracing-appender = "0.2.3"
+jemallocator = "0.5.4"
+mimalloc = "0.1.47"
+config = "0.15.14"

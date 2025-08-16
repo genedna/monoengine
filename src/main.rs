@@ -1,12 +1,21 @@
-use axum::{routing::get, Router};
+mod cli;
+mod common;
 
-async fn hello_world() -> &'static str {
-    "Hello, world!"
-}
+use crate::cli::parse;
 
-#[shuttle_runtime::main]
-async fn main() -> shuttle_axum::ShuttleAxum {
-    let router = Router::new().route("/", get(hello_world));
+#[cfg(not(target_os = "windows"))]
+#[global_allocator]
+static GLOBAL_ALLOCATOR: jemallocator::Jemalloc = jemallocator::Jemalloc;
 
-    Ok(router.into())
+#[cfg(target_os = "windows")]
+#[global_allocator]
+static GLOBAL_ALLOCATOR: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
+fn main() {
+    let result = parse(None);
+
+    // If there was an error, print it
+    if let Err(e) = result {
+        e.print();
+    }
 }
