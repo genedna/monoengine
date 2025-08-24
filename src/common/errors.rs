@@ -103,7 +103,7 @@ impl From<anyhow::Error> for MonoError {
 /// 根据 clap 错误的类型设置相应的错误代码
 impl From<clap::Error> for MonoError {
     fn from(err: clap::Error) -> MonoError {
-        let code = i32::from(err.use_stderr());
+        let code = err.exit_code();
         MonoError::new(err.into(), code)
     }
 }
@@ -178,11 +178,12 @@ mod tests {
         
         // 尝试解析空参数列表，这会产生错误
         let clap_error = cmd.try_get_matches_from(["test"]).unwrap_err();
+        let exit_code = clap_error.exit_code();
         let mono_error: MonoError = clap_error.into();
-        
+
         assert!(mono_error.error.is_some());
-        // clap 错误的代码应该是基于 use_stderr() 的结果
-        assert!(mono_error.code == 0 || mono_error.code == 1);
+        // clap 错误的代码应该等于其 exit_code
+        assert_eq!(mono_error.code, exit_code);
     }
 
     /// 测试错误链
